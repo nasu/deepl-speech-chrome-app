@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "DeepL Speech Chrome APP",
+  "version": "0.1.0",
+  "default_locale": "en",
+  "description": "Display Speech Button in DeepL",
+  "author": "NASU, Tatsuya",
+  "oauth2": {
+    "client_id": "YourClientID",
+    "scopes": ["openid", "https://www.googleapis.com/auth/cloud-platform"]
+  },
+  "permissions": [
+    "identity"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.deepl.com/*/translator", "https://www.deepl.com/translator"],
+      "js": ["speech.js"]
+    }
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  }
+}
