@@ -1,7 +1,22 @@
 'use strict'
 window.onload = async () => {
-    let toolbar = document.querySelector('.lmt__target_toolbar')
-    toolbar.appendChild(makeSpeechButton())
+    DEEPL_CONTENTS.TOOLBAR().appendChild(makeSpeechButton())
+}
+const DEEPL_CONTENTS = {
+    TOOLBAR: () => document.querySelector('.lmt__target_toolbar'),
+    TEXTAREA: () => document.querySelector('.lmt__target_textarea'),
+    TARGET_LANG_BCP47: () => {
+        switch (localStorage.getItem("LMT_selectedTargetLang")) {
+            case "ZH":
+                return "zh-CN"
+            case "EN":
+                return "en-US"
+            case "JA":
+                return "ja-JP"
+            default:
+                return ""
+        }
+    }
 }
 
 function makeSpeechButton () {
@@ -28,11 +43,14 @@ function makeSpeechButton () {
                 15-15s-6.716-15-15-15h-33.594c6.897-31.754 35.206-55.616 68.996-55.616z"/>\
         </svg></button>'
     speech_btn.addEventListener('click', e => {
-        const text = document.querySelector('.lmt__target_textarea').value.trim()
+        const text = DEEPL_CONTENTS.TEXTAREA().value.trim()
         if (!text) return
 
-        //console.log(text)
-        chrome.runtime.sendMessage({text: text}, (res) => {
+        const lang = DEEPL_CONTENTS.TARGET_LANG_BCP47()
+        if (!lang) return
+
+        //console.log(text, lang)
+        chrome.runtime.sendMessage({text: text, lang: lang}, (res) => {
             //console.log(res)
             const data = atob(res.data)
             const buffer = Uint8Array.from(data.split(''), e => e.charCodeAt(0)).buffer

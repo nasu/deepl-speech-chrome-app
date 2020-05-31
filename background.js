@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                         text: message.text,
                     },
                     voice: {
-                        languageCode: 'zh-CN',
+                        languageCode: message.lang,
                         ssmlGender: 'NEUTRAL',
                     },
                     audioConfig: {
